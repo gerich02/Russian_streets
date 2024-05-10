@@ -1,2 +1,6 @@
-# Russia_streets_hackathon
-Хакатон Улицы России
+# Хакатон "Улицы России"
+## Доступ к документации Swagger по ссылкам:
+##### /swagger/ - Вернёт документацию в UI Swagger
+##### /redoc/ - Вернёт документацию в UI Redoc
+##### /swagger.json/ - Вернёт файл в формате JSON
+##### /swagger.yaml/ - Вернёт файл в формате YAML
