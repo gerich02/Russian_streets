@@ -1,7 +1,12 @@
-from django.db import models
-from django.contrib.auth.models import User
-from .constants import CITIES, REGIONS
 from datetime import datetime, timedelta
+
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin
+from django.core.mail import send_mail
+from django.db import models
+
+from .constants import CITIES, REGIONS
+from .managers import UserManager
 
 
 class City(models.Model):
@@ -96,5 +101,61 @@ class Article(models.Model):
                                on_delete=models.CASCADE)
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class User(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(verbose_name='Email',
+                              blank=False,
+                              unique=True)
+    name = models.CharField(verbose_name='Имя',
+                            max_length=30,)
+    surname = models.CharField(verbose_name='Фамилия',
+                               max_length=30,)
+    patronymic = models.CharField(verbose_name='Отчество',
+                                  max_length=30,)
+    phone_number = models.CharField(verbose_name='Номер телефона',
+                                    max_length=12,
+                                    unique=True,)
+    birthdate = models.DateField(verbose_name='Дата рождения')
+    city = models.ForeignKey(City,
+                             null=True,
+                             verbose_name='Город',
+                             on_delete=models.CASCADE)
+    region = models.ForeignKey(Region,
+                               null=True,
+                               verbose_name='Регион',
+                               on_delete=models.CASCADE)
+    social_network = models.CharField(verbose_name='Социальная сеть для связи',
+                                      blank=True,
+                                      max_length=100)
+    is_staff = models.BooleanField(verbose_name='Сотрудник',
+                                   default=False,)
+    passport_series = models.CharField(verbose_name='Серия пасспорта',
+                                       max_length=10,
+                                       unique=True,)
+    passport_number = models.CharField(verbose_name='Номер пасспорта',
+                                       max_length=10,
+                                       unique=True,)
+    passport_giver = models.CharField(verbose_name='Кем выдан пасспорт',
+                                      max_length=255,)
+    passport_date = models.DateField(verbose_name='Дата выдачи пасспорта')
+
+    objects = UserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
+    class Meta:
+        verbose_name = ('user')
+        verbose_name_plural = ('users')
+
+    def get_full_name(self):
+        '''
+        Возвращает ФИО.
+        '''
+        full_name = f'{self.name} {self.surname} {self.patronymic}'
+        return full_name.strip()
+
+    def email_user(self, subject, message, from_email=None, **kwargs):
+        '''
+        Отправляет электронное письмо этому пользователю.
+        '''
+        send_mail(subject, message, from_email, [self.email], **kwargs)
