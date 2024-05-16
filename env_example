@@ -1,0 +1,15 @@
+SECRET_KEY=MY_SECRET_KEY
+DEBUG=True
+
+# Данные админа для входа в админ-зону
+DJANGO_SUPERUSER_USERNAME=adm
+DJANGO_SUPERUSER_EMAIL=adm@adm.com
+DJANGO_SUPERUSER_PASSWORD=admpw
+
+# Application DB
+DB_ENGINE=django.db.backends.postgresql
+DB_NAME=postgres
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgrespw
+DB_HOST=db
+DB_PORT=5432
