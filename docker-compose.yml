@@ -1,0 +1,27 @@
+version: '3'
+volumes:
+  pg_data:
+  static:
+
+services:
+  db:
+    image: postgres:13.10
+    env_file: .env
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+  backend:
+    build: ./backend/
+    command: bash -c "chmod +x start.sh && ./start.sh"
+    env_file: .env
+    depends_on:
+      - db
+    volumes:
+      - static:/backend_static
+  gateway:
+    build: ./gateway/
+    depends_on:
+      - backend
+    volumes:
+      - static:/staticfiles/
+    ports:
+      - 8000:80
