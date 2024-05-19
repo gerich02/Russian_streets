@@ -16,6 +16,16 @@ class City(models.Model):
                             choices=CITIES,
                             verbose_name='Город')
 
+    coords_latitude = models.CharField(max_length=100,
+                                       default=None,
+                                       blank=False,
+                                       verbose_name='Широта')
+
+    coords_longitude = models.CharField(max_length=100,
+                                        default=None,
+                                        blank=False,
+                                        verbose_name='Долгота')
+
 
 class Discipline(models.Model):
     title = models.CharField(max_length=100,
