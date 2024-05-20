@@ -139,14 +139,18 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(verbose_name='Сотрудник',
                                    default=False,)
     passport_series = models.CharField(verbose_name='Серия пасспорта',
+                                       blank=True,
                                        max_length=10,
                                        unique=True,)
     passport_number = models.CharField(verbose_name='Номер пасспорта',
+                                       blank=True,
                                        max_length=10,
                                        unique=True,)
     passport_giver = models.CharField(verbose_name='Кем выдан пасспорт',
+                                      blank=True,
                                       max_length=255,)
-    passport_date = models.DateField(verbose_name='Дата выдачи пасспорта')
+    passport_date = models.DateField(verbose_name='Дата выдачи пасспорта',
+                                     blank=True,)
 
     objects = UserManager()
 
