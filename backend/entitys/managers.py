@@ -4,12 +4,12 @@ from django.contrib.auth.base_user import BaseUserManager
 
 
 class UserManager(BaseUserManager):
+    """Менеджер для кастомного пользователя."""
+
     use_in_migrations = True
 
     def _create_user(self, email, password, **extra_fields):
-        """
-        Создает и сохраняет пользователя с введенным им email и паролем.
-        """
+        """Создает и сохраняет пользователя с введенным им email и паролем."""
         if not email:
             raise ValueError('email должен быть указан')
         email = self.normalize_email(email)
@@ -23,6 +23,7 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
     def create_superuser(self, email, password, **extra_fields):
+        """Создает и сохраняет суперпользователя."""
         extra_fields.setdefault('is_superuser', True)
         fields = {'name': 'default',
                   'surname': 'default',
