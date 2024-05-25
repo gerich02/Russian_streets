@@ -1,11 +1,13 @@
 from . serializers import (UserSerializer,
-                         EventSerializer,
-                         RegionSerializer,
-                         DisciplineSerializer,
-                         ArticleSerializer,
-                         CitySerializer,
-                         PlaceSerializer)
+                           EventSerializer,
+                           RegionSerializer,
+                           DisciplineSerializer,
+                           ArticleSerializer,
+                           CitySerializer,
+                           PlaceSerializer,
+                           UserAllFieldsSerializer)
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.views import APIView
 from entitys.models import (Region,
                             Discipline,
                             Event,
@@ -14,7 +16,11 @@ from entitys.models import (Region,
                             Place,
                             Article)
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
 from rest_framework.decorators import action
+from django.shortcuts import get_object_or_404
+from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework.response import Response
 
 
 class CityViewSet(ModelViewSet):
@@ -83,3 +89,32 @@ class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
+
+
+class UserAllViewSet(ModelViewSet):
+    """Вьюсет для модели пользователя."""
+
+    queryset = User.objects.all()
+    serializer_class = UserAllFieldsSerializer
+    permission_classes = [IsAuthenticated]
+
+
+class UserAutologinView(APIView):
+    """Вью для автологина пользователя."""
+
+    permission_classes = [IsAuthenticated]
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def post(self, request):
+        data = request.data
+        try:
+            decoded_token = AccessToken(data.get('jwt_token'))
+            user_id = decoded_token.payload['user_id']
+            user = get_object_or_404(User, id=user_id)
+            serializer = UserSerializer(user, context={'request': request})
+            return Response(
+                serializer.data, status=status.HTTP_200_OK
+            )
+        except Exception as e:
+            return Response(f'{e}')

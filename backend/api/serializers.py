@@ -6,7 +6,7 @@ from entitys.models import (City,
                             Article,
                             User)
 from rest_framework import serializers
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import AccessToken
 
 
 class ArticleSerializer(serializers.ModelSerializer):
@@ -69,6 +69,17 @@ class DisciplineSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UserAllFieldsSerializer(serializers.ModelSerializer):
+    """Сериализатор модели User, возвращающий все поля."""
+
+    class Meta:
+        """Meta."""
+
+        model = User
+        fields = '__all__'
+        ref_name = 'CustomBaseUser'
+
+
 class UserSerializer(serializers.ModelSerializer):
     """Сериализатор модели User."""
 
@@ -88,5 +99,5 @@ class UserSerializer(serializers.ModelSerializer):
         ref_name = 'CustomUser'
 
     def get_jwt(self, obj):
-        token = RefreshToken.for_user(self.context['request'].user)
-        return str(token.access_token)
+        token = AccessToken.for_user(self.context['request'].user)
+        return str(token)
