@@ -1,9 +1,4 @@
-from entitys.models import (City,
-                            Discipline,
-                            Region,
-                            Place,
-                            Event,
-                            Article,
+from entitys.models import (Article, City, Discipline, Event, Place, Region,
                             User)
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import AccessToken

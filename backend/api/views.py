@@ -1,26 +1,18 @@
-from . serializers import (UserSerializer,
-                           EventSerializer,
-                           RegionSerializer,
-                           DisciplineSerializer,
-                           ArticleSerializer,
-                           CitySerializer,
-                           PlaceSerializer,
-                           UserAllFieldsSerializer)
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.views import APIView
-from entitys.models import (Region,
-                            Discipline,
-                            Event,
-                            User,
-                            City,
-                            Place,
-                            Article)
-from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
+from entitys.models import (Article, City, Discipline, Event, Place, Region,
+                            User)
 from rest_framework import status
 from rest_framework.decorators import action
-from django.shortcuts import get_object_or_404
-from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
+from rest_framework_simplejwt.tokens import AccessToken
+
+from .serializers import (ArticleSerializer, CitySerializer,
+                          DisciplineSerializer, EventSerializer,
+                          PlaceSerializer, RegionSerializer,
+                          UserAllFieldsSerializer, UserSerializer)
 
 
 class CityViewSet(ModelViewSet):

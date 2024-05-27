@@ -1,11 +1,6 @@
 from django.contrib import admin
-from .models import (City,
-                     Discipline,
-                     Region,
-                     Place,
-                     Event,
-                     Article,
-                     User)
+
+from .models import Article, City, Discipline, Event, Place, Region, User
 
 admin.site.register(City)
 admin.site.register(Discipline)
